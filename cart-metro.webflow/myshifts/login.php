@@ -37,15 +37,15 @@
   </div>
   <div class="content-mobile-number">
     <div class="shifts-content">
-		This part of the website is currently under development. Please check back soon.
-<!--
       <div class="w-form">
-        <form id="email-form" name="email-form" action="" method="post">
+		This part of the website is still under development. Please check back soon.
+<!--
+        <form id="email-form" name="email-form" action="calendar.php" method="post">
 			<input class="w-input mobile-text-filled square" id="Mobile-number" type="tel" placeholder="Enter your mobile number" name="phone" required="required">
 			<input class="w-button submit-mobile-number square" type="submit" value="Proceed">
 		</form>
-      </div>
 -->
+		</div>
     </div>
   </div>
   <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>

@@ -2,6 +2,7 @@
 <!-- This site was created in Webflow. http://www.webflow.com-->
 <!-- Last Published: Fri Mar 13 2015 08:04:55 GMT+0000 (UTC) -->
 <html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="5501f5af8d5d8d533f7660e9">
+
 <head>
 <?php
 require('../db.php');
@@ -13,15 +14,15 @@ if (!$month)
 	$year = date('Y');
 	}
 $first_day = date('w', (strtotime('first day of '.$month.', '.$year.'')));
-$days = date('t', (strtotime($month', '$year)));
+$days = date('t', (strtotime($month, $year)));
 $max_shifts = 8;
 echo '
 	<title>'.$month.' Calendar</title>
 	';
 include('../head.php');
 ?>
-
 </head>
+
 <body>
 <?php
 include('../menu.php');
@@ -45,8 +46,26 @@ include('../menu.php');
           <div class="key-current-date full mobile"><?php echo date('j');?></div>
           <div class="key-text mobile">Shifts Full</div>
         </div>
-      </nav><a class="next-month-link" href="../shifts/next_month.php"><?php echo strtoupper(date('F'));?>&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;</a>
-      <div class="w-nav-button w-clearfix menu-button">
+      </nav>
+	  <form id="email-form" name="month" action="calendar.php" method="post">
+		<?php
+			if ($month == date('F')){
+			echo '
+			<input type="hidden" value="'.date('F', (strtotime('next month'))).'" name="month">
+			<input type="hidden" value="'.date('Y', (strtotime('next month'))).'" name="year">			
+			';
+			echo strtoupper($month);?>&nbsp;&nbsp;&nbsp;<button class="w-button location-forward" type="submit"><i class="fa fa-angle-right"></i></button>
+		<?php
+			} if ($month == date('F', (strtotime('next month')))){
+			echo '
+			<input type="hidden" value="'.date('F').'" name="month">
+			<input type="hidden" value="'.date('Y').'" name="year">		
+			';?>
+			<button class="w-button location-forward" type="submit"><i class="fa fa-angle-left"></i></button>&nbsp;&nbsp;&nbsp;<?php echo strtoupper($month);?>
+		<?php	
+			}?>
+	  </form>
+	  <div class="w-nav-button w-clearfix menu-button">
         <div class="icon-key"><i class="fa fa-info-circle"></i></div>
       </div>
     </div>
@@ -83,7 +102,7 @@ include('../menu.php');
 		{
 		$result = 1;
 		$output_class = 'no-shift';
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}
@@ -129,7 +148,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -177,7 +196,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -225,7 +244,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -273,7 +292,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -321,7 +340,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -369,7 +388,7 @@ include('../menu.php');
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -391,7 +410,7 @@ include('../menu.php');
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}
@@ -426,7 +445,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -463,7 +482,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -500,7 +519,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -537,7 +556,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -574,7 +593,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -611,7 +630,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -632,7 +651,7 @@ include('../menu.php');
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}
@@ -667,7 +686,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -704,7 +723,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -741,7 +760,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -778,7 +797,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -815,7 +834,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -852,7 +871,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -873,7 +892,7 @@ include('../menu.php');
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}
@@ -908,7 +927,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -945,7 +964,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -982,7 +1001,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -1019,7 +1038,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -1056,7 +1075,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -1093,7 +1112,7 @@ include('../menu.php');
 		{
 		$output_class = 'shift-available';
 		}
-	if ($result == date('j'))
+	if ($month == date('F') AND $result == date('j'))
 		{
 		$output_class.= ' current-date';
 		}	
@@ -1120,7 +1139,7 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$output_class = 'no-shift';
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}
@@ -1158,7 +1177,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1198,7 +1217,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1238,7 +1257,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1277,7 +1296,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1316,7 +1335,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1355,7 +1374,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1386,7 +1405,7 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$output_class = 'no-shift';
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}
@@ -1424,7 +1443,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1464,7 +1483,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1504,7 +1523,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1543,7 +1562,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1582,7 +1601,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1621,7 +1640,7 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
+		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class.= ' current-date';
 			}	
@@ -1642,8 +1661,9 @@ if ($result <= $days)
 	}
 ?>
   </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
-</body>
+<?php
+include('../foot.php')
+?>
+  </body>
+  
 </html>

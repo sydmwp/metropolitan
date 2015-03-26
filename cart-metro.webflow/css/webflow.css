@@ -203,12 +203,13 @@ textarea.w-select {
 .w-select[multiple] {
   height: auto;
 }
-.w-button {
+.w-button{
   display: inline-block;
   padding: 12px;
-  background-color: black;
+  background-color: white;
   color: white;
   border: 0;
+  outline: 0;
   line-height: inherit;
 }
 .w-form-label {

@@ -14,7 +14,7 @@ date_default_timezone_set('Australia/Sydney');
 $month = date('F', (strtotime('next month')));
 $first_day = date('w', (strtotime('first day of next month')));
 $days = date('t', (strtotime('next month')));
-$max_shifts = 5;
+$max_shifts = 8;
 	
 echo '
 	<title>'.$month.' Calendar</title>
