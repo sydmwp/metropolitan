@@ -1,32 +1,8 @@
 <!DOCTYPE html>
-<!-- Last Published: Thu Mar 19 2015 06:26:13 GMT+0000 (UTC) -->
-<html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="550a05b5e1bdbdd24198512a">
+<html>
 <head>
-  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
-  <link rel="stylesheet" type="text/css" href="../css/webflow.css">
-  <link rel="stylesheet" type="text/css" href="../css/cart-metro.css">
-  <link rel="stylesheet" type="text/css" href="../fonts/css/font-awesome.min.css">
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Webflow">
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ["Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic","Roboto Slab:100,300,regular,700"]
-      }
-    });
-  </script>
-  <script type="text/javascript" src="../js/modernizr.js"></script>
-  <link rel="shortcut icon" type="image/x-icon" href="../images/metro-favicon.png">
-  <link rel="apple-touch-icon" href="../images/metropolitan.png">
 <?php
-$con=mysqli_connect("localhost","sydmw721_admin","1914CE","sydmw721_sydmwp");
-// Check connection
-if (mysqli_connect_errno())
-	{
-	echo "Failed to connect to MySQL: " . mysqli_connect_error();
-	}
+require('../db.php');
 $location_id = $_POST['location_id'];
 $location_search = mysqli_query($con,"SELECT * FROM locations WHERE id = '$location_id'");
 while ($row = mysqli_fetch_array($location_search))
@@ -36,9 +12,6 @@ while ($row = mysqli_fetch_array($location_search))
 $date = $_POST['date'];
 $day = date('d/m/Y',(strtotime($date)));
 $time = $_POST['time'];
-echo '
-  <title>'.$location.', '.$day.', '.$time.'</title>
-  ';
 $existing = $_POST['existing'];
 $volunteer_id = $_POST['volunteer_id'];
 $volunteer = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$volunteer_id'");
@@ -52,6 +25,16 @@ $pioneer_b_id = $_POST['pioneer_b_id'];
 $phone_a = $_POST['phone_a'];
 $phone_a = str_replace('+61', '0', $phone_a);
 $phone_a = str_replace(' ', '', $phone_a);
+$phone_b = $_POST['phone_b'];
+$phone_b = str_replace('+61', '0', $phone_b);
+$phone_b = str_replace(' ', '', $phone_b);
+echo '
+  <title>'.$location.', '.$day.', '.$time.'</title>
+  ';
+include('../head.php');
+?>
+</head>
+<?php
 if ($phone_a)
 	{
 	$pioneer_a = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone_a'");
@@ -60,41 +43,7 @@ if ($phone_a)
 		$pioneer_id = $row[id];
 		$gender_a = $row[gender];
 		}
-	if (!$gender_a)
-		{
-?>
-</head>
-<body class="sorry-not-found">
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="500" data-contain="1" data-doc-height="1" data-easing="ease-in" data-easing2="ease-out">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
-  <div class="face" data-ix="confirmed">
-    <div><i class="fa fa-frown-o"></i></div>
-  </div>
-  <div class="content-sorry">
-    <div>A number is not on file.
-      <br>Please <span class="email-text"><a class="email-text" href="mailto:support@sydmwp.com?subject=Number%20not%20on%20file">EMAIL US</a> </span>to let us know.</div>
-  </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
-</body>
-<?php
-		die;
-		}
 	}
-$phone_b = $_POST['phone_b'];
-$phone_b = str_replace('+61', '0', $phone_b);
-$phone_b = str_replace(' ', '', $phone_b);
 if ($phone_b)
 	{
 	$pioneer_b = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone_b'");
@@ -103,23 +52,14 @@ if ($phone_b)
 		$pioneer_b_id = $row[id];
 		$gender_b = $row[gender];
 		}
-	if (!$gender_b)
-		{
+	}
+if (($phone_a AND !$gender_a) || ($phone_b AND !$gender_b))
+	{
 ?>
-</head>
 <body class="sorry-not-found">
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="500" data-contain="1" data-doc-height="1" data-easing="ease-in" data-easing2="ease-out">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+<?php
+include('../menu.php');
+?>
   <div class="face" data-ix="confirmed">
     <div><i class="fa fa-frown-o"></i></div>
   </div>
@@ -127,14 +67,11 @@ if ($phone_b)
     <div>A number is not on file.
       <br>Please <span class="email-text"><a class="email-text" href="mailto:support@sydmwp.com?subject=Number%20not%20on%20file">EMAIL US</a> </span>to let us know.</div>
   </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 <?php
-		die;
-		}
+	die;
 	}
+
 if (!$overseer_id)	
 	{
 	if ($volunteer_gender == "m")
@@ -261,25 +198,14 @@ else
 		die('Error: ' . mysqli_error($con));
 		}
 	}
-?>
-</head>
-<?php
+
 if ($status !== 'invalid')
 	{
 ?>
 <body>
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="400" data-contain="1" data-doc-height="1">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+<?php
+include('../menu.php');
+?>
   <div class="content-confirm">
     <div class="confirm-content thankyou">
       <div><span class="tick"><i class="fa fa-check"></i></span>
@@ -397,10 +323,7 @@ if ($status !== 'invalid')
 <?php
 		}
 ?>  
-  <a class="button" href="../shifts/current_month.php">BACK TO BOOKINGS</a>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
+  <a class="button" href="../shifts/calendar.php">BACK TO BOOKINGS</a>
 </body>
 <?php
 	}
@@ -408,18 +331,9 @@ if ($status !== 'invalid')
 	{
 ?>
 <body class="sorry-not-found">
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="500" data-contain="1" data-doc-height="1" data-easing="ease-in" data-easing2="ease-out">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+ <?php
+include('../menu.php');
+?>
   <div class="face" data-ix="confirmed">
     <div><i class="fa fa-frown-o"></i></div>
   </div>
@@ -427,9 +341,6 @@ if ($status !== 'invalid')
     <div>That shift is not possible.
       <br>Every shift must have a brother to serve as overseer.</div>
   </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 <?php
 	}

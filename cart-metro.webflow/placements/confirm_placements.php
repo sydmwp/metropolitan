@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- Last Published: Fri Mar 20 2015 07:17:45 GMT+0000 (UTC) -->
-<html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="550b61c9afd603c85d5dc3ab">
+<html>
 <head>
 <?php
 require('../db.php');
@@ -53,9 +52,6 @@ include('../menu.php');
   <div class="placements-entered">
     <div>Your placements have been reported.</div>
   </div>
-  <?php 
-include('../foot.php');
-?>
 </body>
 <?php
 	}
@@ -72,9 +68,6 @@ include('../menu.php');
   <div class="content-sorry">
     <div>Sorry, that shift could not be found. Please check the details you entered and try again. If your details are definitely correct, we're obviously experiencing some difficulties. Please <span class="email-text"><a class="email-text" href="mailto:support@sydmwp.com?subject=Shift%20could%20not%20be%20found">EMAIL US</a> </span>to let us know.</div>
   </div>
-<?php 
-include('../foot.php');
-?>
 </body>
 <?php
 	}

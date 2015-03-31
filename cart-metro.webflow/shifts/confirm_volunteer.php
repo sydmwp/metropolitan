@@ -1,14 +1,8 @@
 <!DOCTYPE html>
-<!-- Last Published: Wed Mar 18 2015 05:41:20 GMT+0000 (UTC) -->
-<html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="5508b45e2a605b6c6acd2eab">
+<html>
 <head>
 <?php
-$con=mysqli_connect("localhost","sydmw721_admin","1914CE","sydmw721_sydmwp");
-// Check connection
-if (mysqli_connect_errno())
-	{
-	echo "Failed to connect to MySQL: " . mysqli_connect_error();
-	}
+require('../db.php');
 $location_id = $_POST['location_id'];
 $location_search = mysqli_query($con,"SELECT * FROM locations WHERE id = '$location_id'");
 while ($row = mysqli_fetch_array($location_search))
@@ -31,25 +25,8 @@ while ($row = mysqli_fetch_array($pioneer))
 echo '
   <title>'.$location.', '.$day.', '.$time.'</title>
   ';
+include('../head.php');
 ?>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Webflow">
-  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
-  <link rel="stylesheet" type="text/css" href="../css/webflow.css">
-  <link rel="stylesheet" type="text/css" href="../css/cart-metro.css">
-  <link rel="stylesheet" type="text/css" href="../fonts/css/font-awesome.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
-  <script>
-    WebFont.load({
-      google: {
-        families: ["Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic","Roboto Slab:100,300,regular,700"]
-      }
-    });
-  </script>
-  <script type="text/javascript" src="../js/modernizr.js"></script>
-  <link rel="shortcut icon" type="image/x-icon" href="../images/metro-favicon.png">
-  <link rel="apple-touch-icon" href="../images/metropolitan.png">
 </head>
 <?php
 if ($volunteer_id)
@@ -70,18 +47,9 @@ if ($volunteer_id)
 		{
 ?>
 <body>
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="400" data-contain="1" data-doc-height="1">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+<?php
+include('../menu.php');
+?>
   <div class="content-confirm">
 	<div class="confirm-content">
 <?php
@@ -244,9 +212,6 @@ if ($pioneer_b_id)
 	
 ?>
 	</div>
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 <?php
 		}
@@ -254,18 +219,9 @@ if ($pioneer_b_id)
 		{
 ?>
 <body class="sorry-not-found">
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="500" data-contain="1" data-doc-height="1" data-easing="ease-in" data-easing2="ease-out">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+<?php
+include('../menu.php');
+?>
   <div class="face" data-ix="confirmed">
     <div><i class="fa fa-frown-o"></i></div>
   </div>
@@ -273,9 +229,6 @@ if ($pioneer_b_id)
     <div>You are already booked in a conflicting shift.
       <br>Please try another shift at a different time.</div>
   </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
 <?php
 		}
@@ -284,18 +237,9 @@ else
 	{
 ?>
 <body class="sorry-not-found">
-  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="500" data-contain="1" data-doc-height="1" data-easing="ease-in" data-easing2="ease-out">
-    <div class="w-container main-nav-container">
-      <a class="w-nav-brand" href="../index.php">
-        <div class="logo-text">SYDNEY METROPOLITAN</div>
-      </a>
-      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
-      </nav>
-      <div class="w-nav-button menu-burger">
-        <div class="w-icon-nav-menu icon-burger"></div>
-      </div>
-    </div>
-  </div>
+<?php
+include('../menu.php');
+?>
   <div class="face" data-ix="confirmed">
     <div><i class="fa fa-frown-o"></i></div>
   </div>
@@ -303,9 +247,6 @@ else
     <div>Your number is not on file.
       <br>Please <span class="email-text"><a class="email-text" href="mailto:support@sydmwp.com?subject=Number%20not%20on%20file">EMAIL US</a> </span>to let us know.</div>
   </div>
-  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-  <script type="text/javascript" src="../js/webflow.js"></script>
-  <!--[if lte IE 9]><script src="https://cdnjs.cloudflare.com/ajax/libs/placeholders/3.0.2/placeholders.min.js"></script><![endif]-->
 </body>
   
 <?php

@@ -90,7 +90,7 @@ p {
 }
 .week-day-text {
   padding-top: 25px;
-  color: #858585;
+  color: white;
   font-size: 18px;
   font-weight: 400;
 }
@@ -106,7 +106,7 @@ p {
   background-color: transparent;
   -webkit-transition-delay: initial;
   transition-delay: initial;
-  color: #8a8a8a;
+  color: #ededed;
 }
 .dates:hover {
   border-radius: 22px;
@@ -115,6 +115,17 @@ p {
 }
 .dates:active {
   background-color: #3c74f7;
+}
+.dates.my-shifts {
+  padding-top: 6px;
+  color: #b0b0b0;
+}
+.dates.my-shifts:hover {
+  background-color: transparent;
+}
+.dates.date-selected {
+  border-radius: 24px;
+  background-color: #e74c3c;
 }
 .form-wrapper {
   position: static;
@@ -135,9 +146,9 @@ p {
   float: left;
 }
 .key.mobile {
-  width: 50%;
+  width: 100%;
   padding-top: 27px;
-  border-right: 1px solid #dedede;
+  float: none;
   border-bottom: 1px solid #dedede;
 }
 .key-current-date {
@@ -150,7 +161,7 @@ p {
   border: 3px solid #dedede;
   border-radius: 33px;
   background-color: transparent;
-  color: #8a8a8a;
+  color: white;
   font-size: 21px;
   font-weight: 400;
   text-align: center;
@@ -175,7 +186,12 @@ p {
 .key-current-date.shifts-available {
   padding-top: 12px;
   border-style: none;
-  color: #707070;
+  color: #ededed;
+}
+.key-current-date.my-shifts {
+  padding-top: 10px;
+  border: 0px none transparent;
+  background-color: #ff9800;
 }
 .key-text {
   padding-top: 14px;
@@ -183,7 +199,10 @@ p {
   font-size: 23px;
 }
 .key-text.mobile {
+  display: inline-block;
   padding-top: 12px;
+  float: left;
+  color: #bdbdbd;
   font-size: 22px;
   text-align: left;
 }
@@ -191,24 +210,31 @@ p {
   position: static;
   height: 55px;
   min-height: 55px;
-  margin-bottom: 10px;
-  border-bottom: 1px solid #dedede;
-  background-color: transparent;
+  margin-bottom: 0px;
+  border-bottom: 1px none #dedede;
+  background-color: #345091;
+}
+.keys-pullout.current-month {
+  background-color: #686978;
 }
 .icon-key {
-  color: #3c74f7;
+  color: white;
   font-size: 26px;
 }
 .key-pull-menu {
-  margin-top: 125px;
-  border-right: 1px solid #dedede;
-  background-color: white;
+  min-width: 400px;
+  margin-top: 70px;
+  background-color: #555663;
+}
+.key-pull-menu.my-shifts {
+  background-color: #193e94;
 }
 .menu-button {
   padding-top: 17px;
   padding-right: 8px;
   padding-bottom: 17px;
   font-family:'Fontawesome webfont', sans-serif;
+  color: white;
 }
 .menu-button.w--open {
   background-color: transparent;
@@ -220,8 +246,8 @@ p {
   position: relative;
   display: block;
   min-height: 70px;
-  background-color: #3c74f7;
-  box-shadow: none;
+  background-color: #d1d1d1;
+  box-shadow: rgba(0, 0, 0, 0.43) 0px 0px 13px 0px;
 }
 .menu-burger {
   padding-top: 15px;
@@ -239,7 +265,7 @@ p {
   padding: 17px 0px;
   float: left;
   font-family:'Fontawesome webfont', sans-serif;
-  color: #3c74f7;
+  color: white;
   font-size: 16px;
   text-decoration: none;
 }
@@ -248,8 +274,9 @@ p {
   min-height: 50px;
   padding: 18px 0px;
   float: left;
+  background-color: transparent;
   font-family:'Fontawesome webfont', sans-serif;
-  color: #3c74f7;
+  color: white;
   font-size: 16px;
   text-decoration: none;
 }
@@ -300,7 +327,8 @@ p {
   padding-top: 6px;
   border-radius: 22px;
   background-color: transparent;
-  color: #d4d4d4;
+  color: #b0b0b0;
+  font-weight: 300;
 }
 .no-shift.current-date {
   padding-top: 5px;
@@ -318,7 +346,7 @@ p {
   border: 2px solid #dedede;
   border-radius: 30px;
   background-color: transparent;
-  color: #8a8a8a;
+  color: #ededed;
 }
 .shift-available {
   position: relative;
@@ -331,7 +359,7 @@ p {
   padding: 0px;
   border-radius: 22px;
   background-color: transparent;
-  color: #707070;
+  color: #dbdbdb;
   font-size: 14px;
   font-weight: 500;
 }
@@ -359,6 +387,10 @@ p {
   background-color: #f06f24;
   color: white;
 }
+.shift-full.my-shift {
+  background-color: #ff9800;
+  color: white;
+}
 .no-shifts {
   position: relative;
   width: 40px;
@@ -366,7 +398,7 @@ p {
   margin-right: 18px;
   padding-top: 12px;
   float: left;
-  color: #d4d4d4;
+  color: #b0b0b0;
   font-size: 21px;
 }
 .home-content {
@@ -376,8 +408,8 @@ p {
   min-width: 71%;
   margin-right: auto;
   margin-left: auto;
-  padding-top: 10%;
-  padding-bottom: 10%;
+  padding-top: 9%;
+  padding-bottom: 9%;
   font-family:'Fontawesome webfont', sans-serif;
   color: white;
   font-size: 57px;
@@ -412,7 +444,7 @@ p {
   min-height: 0px;
   padding-top: 0px;
   padding-bottom: 0px;
-  background-color: #d9d9d9;
+  background-color: #686978;
   -webkit-transition: all 500ms ease;
   transition: all 500ms ease;
   font-family:'Fontawesome webfont', sans-serif;
@@ -420,7 +452,7 @@ p {
   text-decoration: none;
 }
 .home-section.bookings:hover {
-  background-color: #e3e3e3;
+  background-color: #909091;
 }
 .home-section.my-shifts {
   display: block;
@@ -429,7 +461,7 @@ p {
   min-height: 0px;
   padding-top: 0px;
   padding-bottom: 0px;
-  background-color: #354363;
+  background-color: #193e94;
   -webkit-transition: all 500ms ease;
   transition: all 500ms ease;
   font-family:'Fontawesome webfont', sans-serif;
@@ -438,7 +470,7 @@ p {
   text-decoration: none;
 }
 .home-section.my-shifts:hover {
-  background-color: #445270;
+  background-color: #345091;
 }
 .full-page {
   position: fixed;
@@ -494,9 +526,6 @@ p {
   border-bottom: 1px solid #dedede;
   background-color: white;
 }
-.select-date {
-	color: #8a8a8a;
-}
 .shifts-content {
   display: block;
   max-width: 850px;
@@ -508,7 +537,9 @@ p {
   display: block;
   width: 100%;
   margin-right: auto;
+  margin-bottom: 9px;
   margin-left: auto;
+  padding-left: 5px;
   font-size: 26px;
 }
 .date-calandur {
@@ -555,9 +586,7 @@ p {
 }
 .volunteer-accepted {
   position: relative;
-  padding-top: 30px;
-  padding-bottom: 15px;
-  padding-left: 20px;
+  padding: 30px 12px 15px 20px;
   background-color: #f7f7f7;
   color: #c7c7c7;
   font-size: 26px;
@@ -895,6 +924,108 @@ p {
   background-image: url('../images/rovingtwo.jpg');
   background-size: auto;
 }
+.quickview-content {
+  display: block;
+  max-width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-bottom: 80px;
+  font-weight: 300;
+}
+.cal-section {
+  padding-top: 10px;
+  background-color: #345091;
+}
+.cal-section.current-month {
+  background-color: #686978;
+}
+.date-quickview {
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-bottom: 0px;
+  margin-left: auto;
+  padding: 20px 10px 20px 0px;
+  font-size: 26px;
+  font-weight: 400;
+}
+.add-shift {
+  position: relative;
+  bottom: 30px;
+  width: 60px;
+  height: 60px;
+  padding-bottom: 14px;
+  float: right;
+  border-radius: 49px;
+  background-color: #ff9800;
+  box-shadow: rgba(0, 0, 0, 0.43) 0px 0px 13px 0px;
+  font-family: Roboto, sans-serif;
+  font-size: 34px;
+  font-weight: 100;
+}
+.column-shifts {
+  padding-right: 0px;
+}
+.date-cal {
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.overview-shifts-tab {
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-left: auto;
+  font-weight: 500;
+}
+.tabs {
+  background-color: transparent;
+  text-align: center;
+}
+.tabs.w--current {
+  border-bottom: 3px solid #ff9800;
+  background-color: transparent;
+  text-align: center;
+}
+.my-shifts-content {
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.delete-shift {
+  padding: 0px 5px;
+  background-color: transparent;
+  font-family: Roboto, sans-serif;
+  color: dimgray;
+}
+.form-month {
+  max-width: 200px;
+  float: left;
+}
+.form-wrapper-submit {
+  max-width: 200px;
+}
+.back-to-my-shifts-div {
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.back-to-my-shifts-button {
+  display: block;
+  margin-top: 21px;
+  margin-right: auto;
+  margin-left: auto;
+  border-radius: 2px;
+  background-color: #d1d1d1;
+  font-size: 16px;
+  text-align: center;
+}
+.select-date {
+  color: #8a8a8a;
+  font-size: 18px;
+}
 html.w-mod-js *[data-ix="tick"] {
   opacity: 0;
 }
@@ -936,12 +1067,15 @@ html.w-mod-js *[data-ix="tick"] {
     display: block;
     margin-right: auto;
     margin-left: auto;
-    padding-top: 3px;
+    padding-top: 7px;
     float: none;
     text-align: center;
   }
   .key-pull-menu {
     max-width: 470px;
+  }
+  .key-pull-menu.my-shifts {
+    max-width: 100%;
   }
   .menu-button {
     padding-right: 18px;
@@ -968,6 +1102,7 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .main-nav-container {
     max-width: 100%;
+    box-shadow: rgba(0, 0, 0, 0.43) 0px 0px 13px 0px;
   }
   .logo-text {
     padding-right: 10px;
@@ -977,6 +1112,9 @@ html.w-mod-js *[data-ix="tick"] {
     top: 25px;
     padding-top: 7px;
     background-color: transparent;
+  }
+  .current-date {
+    color: #ededed;
   }
   .shift-available {
     top: 25px;
@@ -988,7 +1126,7 @@ html.w-mod-js *[data-ix="tick"] {
     display: block;
     margin-right: auto;
     margin-left: auto;
-    padding-top: 6px;
+    padding-top: 10px;
     float: none;
   }
   .home-content {
@@ -1017,7 +1155,6 @@ html.w-mod-js *[data-ix="tick"] {
   .location-select {
     margin-bottom: 0px;
   }
-  
   .shifts-content {
     max-width: 90%;
   }
@@ -1037,6 +1174,8 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .volunteer-accepted {
     padding-top: 20px;
+    padding-right: 6px;
+    padding-left: 6px;
     font-size: 20px;
   }
   .submit-mobile-number {
@@ -1125,6 +1264,33 @@ html.w-mod-js *[data-ix="tick"] {
   .map._2 {
     background-size: cover;
   }
+  .quickview-content {
+    max-width: 90%;
+    padding-bottom: 49px;
+  }
+  .date-quickview {
+    max-width: 90%;
+    padding-left: 0px;
+  }
+  .add-shift {
+    bottom: 30px;
+    width: 56px;
+    height: 56px;
+    padding-bottom: 12px;
+    font-size: 24px;
+  }
+  .date-cal {
+    max-width: 90%;
+  }
+  .overview-shifts-tab {
+    max-width: 90%;
+  }
+  .my-shifts-content {
+    max-width: 100%;
+  }
+  .section-dates {
+    background-color: white;
+  }
 }
 @media (max-width: 767px) {
   .button {
@@ -1154,10 +1320,9 @@ html.w-mod-js *[data-ix="tick"] {
     margin-bottom: 15px;
   }
   .key.mobile {
-    width: 50%;
+    width: 100%;
     padding-top: 17px;
     padding-left: 0px;
-    border-right: 1px solid #dedede;
     border-bottom: 1px solid #dedede;
   }
   .key-current-date {
@@ -1193,18 +1358,20 @@ html.w-mod-js *[data-ix="tick"] {
     height: 50px;
     background-color: transparent;
   }
+  .keys-pullout.current-month {
+    background-color: #673ab7;
+  }
   .icon-key {
     float: right;
     font-family:'Fontawesome webfont', sans-serif;
-    color: #3c74f7;
+    color: white;
   }
   .key-pull-menu {
     width: 100%;
     max-width: 100%;
     min-width: 100%;
     margin-top: 124px;
-    border-top: 1px solid #dedede;
-    background-color: white;
+    background-color: #555663;
   }
   .menu-button {
     position: relative;
@@ -1222,7 +1389,7 @@ html.w-mod-js *[data-ix="tick"] {
     font-size: 28px;
   }
   .uni-nav {
-    background-color: #3c74f7;
+    background-color: #d1d1d1;
     box-shadow: none;
     color: white;
     font-size: 16px;
@@ -1247,7 +1414,7 @@ html.w-mod-js *[data-ix="tick"] {
     padding: 15px 10px;
     float: left;
     font-family:'Fontawesome webfont', sans-serif;
-    color: #3c74f7;
+    color: white;
     font-size: 16px;
     text-decoration: none;
   }
@@ -1256,6 +1423,10 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .secoundary-nav-container {
     max-width: 100%;
+    background-color: #345091;
+  }
+  .secoundary-nav-container.current-month {
+    background-color: #686978;
   }
   .logo-text {
     padding-left: 0px;
@@ -1268,6 +1439,7 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .current-date {
     top: 0px;
+    color: #ededed;
   }
   .shift-available {
     top: 0px;
@@ -1289,6 +1461,12 @@ html.w-mod-js *[data-ix="tick"] {
     padding-bottom: 6%;
     font-size: 34px;
   }
+  .home-section.my-shifts {
+    background-color: #345091;
+  }
+  .home-section.my-shifts:hover {
+    background-color: #495e8f;
+  }
   .location-text {
     font-size: 22px;
   }
@@ -1305,8 +1483,9 @@ html.w-mod-js *[data-ix="tick"] {
     max-width: 95%;
   }
   .text-volunteer {
-    font-size: 17px;
+    font-size: 18px;
     line-height: 25px;
+    text-align: center;
   }
   .date-calandur {
     padding-top: 15px;
@@ -1442,6 +1621,42 @@ html.w-mod-js *[data-ix="tick"] {
   .map._2 {
     background-position: 53% 50%;
   }
+  .quickview-content {
+    max-width: 95%;
+  }
+  .date-quickview {
+    font-size: 22px;
+  }
+  .add-shift {
+    bottom: 28px;
+    width: 56px;
+    height: 56px;
+    padding-right: 14px;
+    font-size: 24px;
+  }
+  .date-cal {
+    max-width: 95%;
+  }
+  .overview-shifts-tab {
+    max-width: 100%;
+  }
+  .my-shifts-content {
+    max-width: 100%;
+  }
+  .delete-shift {
+    display: block;
+    margin-top: 16px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+  .down-arrow {
+    padding-top: 20px;
+    padding-right: 20px;
+    float: right;
+    font-family:'Fontawesome webfont', sans-serif;
+    font-size: 19px;
+  }
 }
 @media (max-width: 479px) {
   .button {
@@ -1468,7 +1683,7 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .week-day-text {
     padding: 20px 10px;
-    color: #858585;
+    color: white;
     font-size: 16px;
     font-weight: 400;
     text-align: center;
@@ -1482,12 +1697,17 @@ html.w-mod-js *[data-ix="tick"] {
     margin-bottom: 8px;
     margin-left: auto;
     padding: 0px;
-    color: #969696;
+    color: #ededed;
     font-size: 14px;
     text-align: center;
   }
   .form-wrapper {
     margin-bottom: 0px;
+  }
+  .key.mobile {
+    width: 100%;
+    max-width: 100%;
+    float: none;
   }
   .key-text.mobile {
     padding-top: 0px;
@@ -1497,17 +1717,26 @@ html.w-mod-js *[data-ix="tick"] {
   .keys-pullout {
     border-bottom: 1px solid #dedede;
   }
+  .keys-pullout.current-month {
+    background-color: #686978;
+  }
   .icon-key {
+    color: white;
     font-size: 26px;
   }
   .key-pull-menu {
     max-width: 265px;
     margin-top: 124px;
   }
+  .key-pull-menu.my-shifts {
+    position: absolute;
+    max-width: 100%;
+  }
   .menu-button {
     min-height: 55px;
     padding-top: 16px;
     padding-bottom: 16px;
+    color: white;
   }
   .uni-nav {
     box-shadow: none;
@@ -1531,10 +1760,10 @@ html.w-mod-js *[data-ix="tick"] {
   .last-month-text {
     height: 100%;
     min-height: 50px;
-    padding: 14px 10px;
+    padding: 18px 10px;
     float: left;
     font-family:'Fontawesome webfont', sans-serif;
-    color: #3c74f7;
+    color: white;
     font-size: 16px;
     text-decoration: none;
   }
@@ -1546,6 +1775,7 @@ html.w-mod-js *[data-ix="tick"] {
   .secoundary-nav-container {
     height: 50px;
     min-height: 55px;
+    background-color: #345091;
   }
   .logo-text {
     font-size: 18px;
@@ -1562,7 +1792,8 @@ html.w-mod-js *[data-ix="tick"] {
     top: 11px;
     width: 30px;
     height: 30px;
-    padding-right: 1px;
+    padding-right: 2px;
+    color: #ededed;
     font-size: 14px;
   }
   .shift-available {
@@ -1611,7 +1842,16 @@ html.w-mod-js *[data-ix="tick"] {
     max-width: 100%;
   }
   .text-volunteer {
-    font-size: 14px;
+    margin-bottom: 2px;
+    padding-left: 0px;
+    font-size: 17px;
+    text-align: center;
+  }
+  .text-volunteer.mobile-number {
+    text-align: center;
+  }
+  .text-volunteer.current-month {
+    text-align: left;
   }
   .date-calandur {
     max-width: 100%;
@@ -1633,7 +1873,8 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .volunteer-accepted {
     padding-top: 20px;
-    padding-left: 16px;
+    padding-right: 4px;
+    padding-left: 4px;
   }
   .submit-mobile-number {
     height: 60px;
@@ -1764,6 +2005,58 @@ html.w-mod-js *[data-ix="tick"] {
     height: 187px;
     background-position: 40% 50%;
     background-size: 425px;
+  }
+  .quickview-content {
+    max-width: 100%;
+    padding-bottom: 30px;
+  }
+  .cal-section {
+    padding-top: 2px;
+    padding-bottom: 5px;
+  }
+  .date-quickview {
+    margin-bottom: 15px;
+    padding-top: 24px;
+    padding-bottom: 0px;
+  }
+  .add-shift {
+    bottom: 29px;
+    width: 56px;
+    height: 56px;
+    padding-top: 18px;
+    padding-right: 12px;
+    padding-bottom: 19px;
+    font-size: 24px;
+    font-weight: 300;
+  }
+  .overview-shifts-tab {
+    max-width: 100%;
+  }
+  .tabs {
+    display: inline-block;
+    width: 33.33%;
+    height: 48px;
+    padding: 16px 6px;
+    float: left;
+    text-align: center;
+  }
+  .tabs.w--current {
+    width: 33.33%;
+    padding-right: 6px;
+    padding-left: 6px;
+    float: left;
+  }
+  .my-shifts-content {
+    max-width: 100%;
+  }
+  .delete-shift {
+    margin-top: 11px;
+    padding-left: 6px;
+    color: dimgray;
+    font-size: 18px;
+  }
+  .form-wrapper-submit {
+    margin-bottom: 1px;
   }
 }
 

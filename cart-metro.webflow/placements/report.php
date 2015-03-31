@@ -1,6 +1,5 @@
 <!DOCTYPE html>
-<!-- Last Published: Fri Mar 20 2015 07:17:45 GMT+0000 (UTC) -->
-<html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="550b4ba95b7ee5ba660e4dbc">
+<html>
 <head>
 <?php
 require('../db.php');
@@ -48,8 +47,5 @@ echo $output_location;
       </form>
     </div>
   </div>
-<?php
-include('../foot.php');
-?>  
-  </body>
+ </body>
 </html>

@@ -8,7 +8,7 @@ echo '
       <nav class="w-nav-menu main-nav-pull-out" role="navigation">
 		<a class="w-nav-link nav-link" href="../index.php">HOME</a>
 		<a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a>
-		<a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a>
+		<a class="w-nav-link nav-link" href="../shifts/calendar.php">BOOKINGS</a>
 		<a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a>
 		<a class="w-nav-link nav-link" href="#">FAQ</a>
 		<a class="w-nav-link nav-link" href="#">CONTACT</a>

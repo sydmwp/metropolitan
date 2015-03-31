@@ -4,28 +4,55 @@
 <html data-wf-site="5501f5af8d5d8d533f7660e8" data-wf-page="5501f5af8d5d8d533f7660e9">
 <head>
 <?php
-require('../db.php');
-$month = $_POST['month'];
-$year = $_POST['year'];
-if (!$month)
+$con=mysqli_connect("localhost","sydmw721_admin","1914CE","sydmw721_sydmwp");
+// Check connection
+if (mysqli_connect_errno())
 	{
-	$month = date('F');
-	$year = date('Y');
+	echo "Failed to connect to MySQL: " . mysqli_connect_error();
 	}
-$first_day = date('w', (strtotime('first day of '.$month.', '.$year.'')));
-$days = date('t', (strtotime($month', '$year)));
+date_default_timezone_set('Australia/Sydney');
+$month = date('F');
+$first_day = date('w', (strtotime('first day of '.$month.', 2015')));
+$days = date('t');
 $max_shifts = 8;
+	
 echo '
 	<title>'.$month.' Calendar</title>
 	';
-include('../head.php');
 ?>
-
+  <meta charset="utf-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="generator" content="Webflow">
+  <link rel="stylesheet" type="text/css" href="../css/normalize.css">
+  <link rel="stylesheet" type="text/css" href="../css/webflow.css">
+  <link rel="stylesheet" type="text/css" href="../css/cart-metro.css">
+  <link rel="stylesheet" type="text/css" href="../fonts/font-awesome/font-awesome-4.3.0/css/font-awesome.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
+  <script>
+    WebFont.load({
+      google: {
+        families: ["Roboto:100,100italic,300,300italic,regular,italic,500,500italic,700,700italic","Roboto Slab:100,300,regular,700"]
+      }
+    });
+  </script>
+  <script type="text/javascript" src="../js/modernizr.js"></script>
+  <link rel="shortcut icon" type="image/x-icon" href="../images/metro-favicon.png">
+  <link rel="apple-touch-icon" href="../images/metropolitan.png">
 </head>
 <body>
-<?php
-include('../menu.php');
-?>
+  <div class="w-nav uni-nav" data-collapse="all" data-animation="over-left" data-duration="300" data-contain="1">
+    <div class="w-container main-nav-container">
+      <a class="w-nav-brand" href="../index.php">
+        <div class="logo-text">SYDNEY METROPOLITAN</div>
+      </a>
+      <nav class="w-nav-menu main-nav-pull-out" role="navigation"><a class="w-nav-link nav-link" href="../index.php">HOME</a><a class="w-nav-link nav-link" href="../placements/report.php">PLACEMENTS</a><a class="w-nav-link nav-link" href="../shifts/current_month.php">BOOKINGS</a><a class="w-nav-link nav-link" href="../myshifts/login.php">MY SHIFTS</a><a class="w-nav-link nav-link" href="#">FAQ</a><a class="w-nav-link nav-link" href="#">CONTACT</a>
+      </nav>
+      <div class="w-nav-button menu-burger">
+        <div class="w-icon-nav-menu icon-burger"></div>
+      </div>
+    </div>
+  </div>
   <div class="w-nav keys-pullout" data-collapse="all" data-animation="over-left" data-duration="300" data-contain="1" data-doc-height="1">
     <div class="w-container secoundary-nav-container">
       <nav class="w-nav-menu w-clearfix key-pull-menu" role="navigation">

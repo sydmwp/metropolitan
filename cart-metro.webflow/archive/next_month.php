@@ -11,23 +11,11 @@ if (mysqli_connect_errno())
 	echo "Failed to connect to MySQL: " . mysqli_connect_error();
 	}
 date_default_timezone_set('Australia/Sydney');
-$month = $_POST['month'];
-if (!$month)
-	{
-	$month = date('F');
-	}
-$first_day = date('w', (strtotime('first day of $month')));
-$days = date('t', ($month));
-$phone = $_POST['phone'];
-$phone = str_replace('+61', '0', $phone);
-$phone = str_replace(' ', '', $phone);
-$pioneer = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone'");
-while ($row = mysqli_fetch_array($pioneer))
-	{
-	$volunteer_id = $row[id];
-	$first_name = $row[first_name];
-	$last_name = $row[last_name];
-	}
+$month = date('F', (strtotime('next month')));
+$first_day = date('w', (strtotime('first day of next month')));
+$days = date('t', (strtotime('next month')));
+$max_shifts = 8;
+	
 echo '
 	<title>'.$month.' Calendar</title>
 	';
@@ -39,7 +27,7 @@ echo '
   <link rel="stylesheet" type="text/css" href="../css/normalize.css">
   <link rel="stylesheet" type="text/css" href="../css/webflow.css">
   <link rel="stylesheet" type="text/css" href="../css/cart-metro.css">
-  <link rel="stylesheet" type="text/css" href="../fonts/css/font-awesome.min.css">
+  <link rel="stylesheet" type="text/css" href="../fonts/font-awesome/font-awesome-4.3.0/css/font-awesome.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.4.7/webfont.js"></script>
   <script>
     WebFont.load({
@@ -84,14 +72,7 @@ echo '
           <div class="key-current-date full mobile"><?php echo date('j');?></div>
           <div class="key-text mobile">Shifts Full</div>
         </div>
-      </nav>
-	  <form name="month_nav" method="post" action="calendar.php">
-		<?php echo '<input type="hidden" name="month" value="'.$month.'">'; ?>
-	  <?php if($month == date('F')) { ?>
-	  <button type="submit" class="next-month-link"><?php echo strtoupper(date('F'));?>&nbsp;&nbsp;&nbsp;<i class="fa fa-angle-right"></i>&nbsp;</button>
-	  <?php } if($month == (date('F', (strtotime('next month'))))) { ?>
-	  <button type="submit" class="next-month-link"><i class="fa fa-angle-left"></i>&nbsp;&nbsp;&nbsp;<?php echo strtoupper(date('F', (strtotime('next month'))));?>&nbsp;</button>
-	  <?php } ?>
+      </nav><a class="next-month-link" href="../shifts/current_month.php"><i class="fa fa-angle-left"></i>&nbsp;&nbsp;&nbsp;<?php echo strtoupper(date('F', (strtotime('next month'))));?></a>
       <div class="w-nav-button w-clearfix menu-button">
         <div class="icon-key"><i class="fa fa-info-circle"></i></div>
       </div>
@@ -129,10 +110,6 @@ echo '
 		{
 		$result = 1;
 		$output_class = 'no-shift';
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}
 		echo '
 			<div class ="'.$output_class.'">
 				'.$result.'
@@ -157,12 +134,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -170,13 +152,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -198,12 +178,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -211,13 +196,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -239,12 +222,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -252,13 +240,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -280,12 +266,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -293,13 +284,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -321,12 +310,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -334,13 +328,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -362,12 +354,17 @@ echo '
 		}
 	if ($result)
 		{
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -375,13 +372,11 @@ echo '
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -395,10 +390,6 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
 	echo '
 		<div class ="'.$output_class.'">
 				'.$result.'
@@ -412,26 +403,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -442,26 +436,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -472,26 +469,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -502,26 +502,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -532,26 +535,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -562,26 +568,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -594,10 +603,6 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
 	echo '
 		<div class ="'.$output_class.'">
 				'.$result.'
@@ -611,26 +616,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
 			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -641,56 +649,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
-		';
-	$result++;
-	$output_class = "";
-?>
-        </div>
-      </div>
-      <div class="calendar-date">
-        <div class="w-form form-wrapper">
-<?php
-	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
-		{
-		$shift_id = $row[id];
-		}
-	if ($shift_id)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}	
-	echo '
-		<input type="hidden" name="date" value="'.$date.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
 			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -701,56 +682,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
-		';
-	$result++;
-	$output_class = "";
-?>
-        </div>
-      </div>
-      <div class="calendar-date">
-        <div class="w-form form-wrapper">
-<?php
-	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
-		{
-		$shift_id = $row[id];
-		}
-	if ($shift_id)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}	
-	echo '
-		<input type="hidden" name="date" value="'.$date.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
 			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -761,26 +715,95 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
 			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
+		';
+	$result++;
+	$output_class = "";
+?>
+        </div>
+      </div>
+      <div class="calendar-date">
+        <div class="w-form form-wrapper">
+<?php
+	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
+		{
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
+		}
+	if ($full_count == $max_shifts)
+		{
+		$output_class = 'shift-full';
+		}
+		else
+		{
+		$output_class = 'shift-available';
+		}	
+	echo '
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
+		';
+	$result++;
+	$output_class = "";
+?>
+        </div>
+      </div>
+      <div class="calendar-date">
+        <div class="w-form form-wrapper">
+<?php
+	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
+		{
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
+		}
+	if ($full_count == $max_shifts)
+		{
+		$output_class = 'shift-full';
+		}
+		else
+		{
+		$output_class = 'shift-available';
+		}	
+	echo '
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -793,10 +816,6 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$output_class = 'no-shift';
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
 	echo '
 		<div class ="'.$output_class.'">
 				'.$result.'
@@ -810,26 +829,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -840,26 +862,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -870,26 +895,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -900,26 +928,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -930,26 +961,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -960,26 +994,29 @@ echo '
         <div class="w-form form-wrapper">
 <?php
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-	while ($row = mysqli_fetch_array($shift_query))
+	$full_count = 0;
+	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+	while ($row = mysqli_fetch_array($full_test))
 		{
-		$shift_id = $row[id];
+		$full = $row[full];
+		if ($full)
+			{
+			++$full_count;
+			}
 		}
-	if ($shift_id)
+	if ($full_count == $max_shifts)
 		{
 		$output_class = 'shift-full';
 		}
 		else
 		{
 		$output_class = 'shift-available';
-		}
-	if ($result == date('j'))
-		{
-		$output_class.= ' current-date';
 		}	
 	echo '
-		<input type="hidden" name="date" value="'.$date.'">
-		<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+			<input type="hidden" name="date" value="'.$date.'">
+			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+		</form>
 		';
 	$result++;
 	$output_class = "";
@@ -998,10 +1035,6 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$output_class = 'no-shift';
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}
 		echo '
 			<div class ="'.$output_class.'">
 				'.$result.'
@@ -1018,12 +1051,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1031,13 +1069,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1051,12 +1087,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1064,13 +1105,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1084,12 +1123,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1097,13 +1141,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1116,12 +1158,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1129,13 +1176,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1148,12 +1193,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1161,13 +1211,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1180,12 +1228,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1193,13 +1246,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1222,10 +1273,6 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$output_class = 'no-shift';
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}
 		echo '
 			<div class ="'.$output_class.'">
 				'.$result.'
@@ -1242,12 +1289,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1255,13 +1307,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1275,12 +1325,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1288,13 +1343,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1308,12 +1361,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1321,45 +1379,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
-			';
-		$result++;
-		$output_class = "";
-		}
-?>
-        </div>
-      </div><div class="calendar-date">
-        <div class="w-form form-wrapper">
-<?php
-	if ($result <= $days)
-		{
-		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
-			{
-			$shift_id = $row[id];
-			}
-		if ($shift_id)
-			{
-			$output_class = 'shift-full';
-			}
-			else
-			{
-			$output_class = 'shift-available';
-			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
-		echo '
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
 				<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1372,12 +1396,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1385,13 +1414,11 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";
@@ -1404,12 +1431,17 @@ if ($result <= $days)
 	if ($result <= $days)
 		{
 		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-		$shift_query = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_query))
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
 			{
-			$shift_id = $row[id];
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
 			}
-		if ($shift_id)
+		if ($full_count == $max_shifts)
 			{
 			$output_class = 'shift-full';
 			}
@@ -1417,13 +1449,46 @@ if ($result <= $days)
 			{
 			$output_class = 'shift-available';
 			}
-		if ($result == date('j'))
-			{
-			$output_class.= ' current-date';
-			}	
 		echo '
-			<input type="hidden" name="date" value="'.$date.'">
-			<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
+			';
+		$result++;
+		$output_class = "";
+		}
+?>
+        </div>
+      </div><div class="calendar-date">
+        <div class="w-form form-wrapper">
+<?php
+	if ($result <= $days)
+		{
+		$date = date('Y\-m\-d', (strtotime("$result $month this year")));
+		$full_count = 0;
+		$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
+		while ($row = mysqli_fetch_array($full_test))
+			{
+			$full = $row[full];
+			if ($full)
+				{
+				++$full_count;
+				}
+			}
+		if ($full_count == $max_shifts)
+			{
+			$output_class = 'shift-full';
+			}
+			else
+			{
+			$output_class = 'shift-available';
+			}
+		echo '
+			<form id="email-form" name="shifts_day_view" method="post" action="day_view.php">
+				<input type="hidden" name="date" value="'.$date.'">
+				<input class="w-button '.$output_class.'" type="submit" value="'.$result.'">
+			</form>
 			';
 		$result++;
 		$output_class = "";

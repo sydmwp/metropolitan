@@ -17,9 +17,5 @@ include('../menu.php');
 ?>
 
 
-
-<?php 
-include('../foot.php');
-?>
 </body>
 </html>
