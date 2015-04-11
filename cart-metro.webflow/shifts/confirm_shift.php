@@ -1,24 +1,28 @@
+<?php
+require('../db.php');
+?>
 <!DOCTYPE html>
 <html>
 <head>
 <?php
-require('../db.php');
 $location_id = $_POST['location_id'];
-$location_search = mysqli_query($con,"SELECT * FROM locations WHERE id = '$location_id'");
-while ($row = mysqli_fetch_array($location_search))
-	{
-	$location = strtoupper($row[name]);
-	}
+$stmt = $con->prepare($location_select);
+	$stmt->bind_param('i', $location_id);
+	$stmt->execute();
+	$stmt->bind_result($location);
+	$stmt->fetch();
+$stmt->close();
 $date = $_POST['date'];
 $day = date('d/m/Y',(strtotime($date)));
 $time = $_POST['time'];
 $existing = $_POST['existing'];
-$volunteer_id = $_POST['volunteer_id'];
-$volunteer = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$volunteer_id'");
-while ($row = mysqli_fetch_array($volunteer))
-	{
-	$volunteer_gender = $row[gender];
-	}
+$volunteer_id = $user;
+$stmt = $con->prepare($pioneer_select);
+	$stmt->bind_param('i', $volunteer_id);
+	$stmt->execute();
+	$stmt->bind_result($f, $l, $volunteer_gender, $p);
+	$stmt->fetch();
+$stmt->close();
 $overseer_id = $_POST['overseer_id'];
 $pioneer_id = $_POST['pioneer_id'];
 $pioneer_b_id = $_POST['pioneer_b_id'];
@@ -37,21 +41,21 @@ include('../head.php');
 <?php
 if ($phone_a)
 	{
-	$pioneer_a = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone_a'");
-	while ($row = mysqli_fetch_array($pioneer_a))
-		{
-		$pioneer_id = $row[id];
-		$gender_a = $row[gender];
-		}
+	$stmt = $con->prepare($pioneer_phone_select);
+		$stmt->bind_param('s', $phone_a);
+		$stmt->execute();
+		$stmt->bind_result($pioneer_id, $f, $l, $gender_a);
+		$stmt->fetch();
+	$stmt->close();
 	}
 if ($phone_b)
 	{
-	$pioneer_b = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone_b'");
-	while ($row = mysqli_fetch_array($pioneer_b))
-		{
-		$pioneer_b_id = $row[id];
-		$gender_b = $row[gender];
-		}
+	$stmt = $con->prepare($pioneer_phone_select);
+		$stmt->bind_param('s', $phone_b);
+		$stmt->execute();
+		$stmt->bind_result($pioneer_b_id, $f, $l, $gender_b);
+		$stmt->fetch();
+	$stmt->close();
 	}
 if (($phone_a AND !$gender_a) || ($phone_b AND !$gender_b))
 	{
@@ -136,18 +140,20 @@ if ($overseer_id)
 	{
 	if ($pioneer_id && !$pioneer_b_id)
 		{
-		$brother_check = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$pioneer_id'");
-		while ($row = mysqli_fetch_array($brother_check))
-			{
-			$gender = $row[gender];
-			}
+		$stmt = $con->prepare($pioneer_select);
+			$stmt->bind_param('i', $pioneer_id);
+			$stmt->execute();
+			$stmt->bind_result($f, $l, $gender, $p);
+			$stmt->fetch();
+		$stmt->close();
 		if ($gender == "f")
 			{
-			$couple_check = mysqli_query($con,"SELECT * FROM couples WHERE brother_id = '$overseer_id' AND sister_id = '$pioneer_id'");
-			while ($row = mysqli_fetch_array($couple_check))
-				{
-				$couple_id = $row[id];
-				}
+			$stmt = $con->prepare($couple_select);
+				$stmt->bind_param('ii', $overseer_id, $pioneer_id);
+				$stmt->execute();
+				$stmt->bind_result($couple_id);
+				$stmt->fetch();
+			$stmt->close();
 			if ($couple_id)
 				{
 				$confirmed = "y";
@@ -159,19 +165,22 @@ if ($overseer_id)
 			}
 		}
 	}
-$overseer_details = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$overseer_id'");
+$overseer_id = (int)$overseer_id;
+$overseer_details = mysqli_query($con,"SELECT first_name, last_name, phone FROM pioneers WHERE id = '$overseer_id'");
 while ($row = mysqli_fetch_array($overseer_details))
 	{
 	$overseer_name = "{$row['first_name']} {$row['last_name']}";
 	$overseer_phone = $row[phone];
 	}
-$pioneer_details = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$pioneer_id'");
+$pioneer_id = (int)$pioneer_id;
+$pioneer_details = mysqli_query($con,"SELECT first_name, last_name, phone FROM pioneers WHERE id = '$pioneer_id'");
 while ($row = mysqli_fetch_array($pioneer_details))
 	{
 	$pioneer_name = "{$row['first_name']} {$row['last_name']}";
 	$pioneer_phone = $row[phone];
 	}
-$pioneer_b_details = mysqli_query($con,"SELECT * FROM pioneers WHERE id = '$pioneer_b_id'");
+$pioneer_b_id = (int)$pioneer_b_id;
+$pioneer_b_details = mysqli_query($con,"SELECT first_name, last_name, phone FROM pioneers WHERE id = '$pioneer_b_id'");
 while ($row = mysqli_fetch_array($pioneer_b_details))
 	{
 	$pioneer_b_name = "{$row['first_name']} {$row['last_name']}";
@@ -179,26 +188,29 @@ while ($row = mysqli_fetch_array($pioneer_b_details))
 	}
 if (!$existing)
 	{
-	$sql = "INSERT INTO `sydmw721_sydmwp`.`shifts` (`id`, `location_id`, `date`, `time`, `overseer_id`, `pioneer_id`, `pioneer_b_id`, `confirmed`, `full`) VALUES (NULL, '$location_id', '$date', '$time', '$overseer_id', '$pioneer_id', '$pioneer_b_id', '$confirmed', '$full')";
-	if (!mysqli_query($con,$sql))
-		{
-		die('Error: ' . mysqli_error($con));
-		}
+	if (!$overseer_id) {$overseer_id = "";}
+	if (!$pioneer_id) {$pioneer_id = "";}
+	if (!$pioneer_b_id) {$pioneer_b_id = "";}
+	if (!$confirmed) {$confirmed = "";}
+	if (!$full) {$full = "";}
+	$stmt = $con->prepare($shift_insert);
+		$stmt->bind_param('issiiiss', $location_id, $date, $time, $overseer_id, $pioneer_id, $pioneer_b_id, $confirmed, $full);
+		$stmt->execute();
+	$stmt->close();
 	}
 else
 	{
-	$result_shift = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND time = '$time' AND location_id = '$location_id'");
-	while($row = mysqli_fetch_array($result_shift))
-		{
-		$shift_id = $row['id'];
-		}
-	$sql = "UPDATE `sydmw721_sydmwp`.`shifts` SET `overseer_id` = '$overseer_id', `pioneer_id` = '$pioneer_id', `pioneer_b_id` = '$pioneer_b_id', `full` = '$full', `confirmed` = '$confirmed' WHERE `shifts`.`id` = '$shift_id'";
-	if (!mysqli_query($con,$sql))
-		{
-		die('Error: ' . mysqli_error($con));
-		}
+	$stmt = $con->prepare($shift_select);
+		$stmt->bind_param('ssi', $date, $time, $location_id);
+		$stmt->execute();
+		$stmt->bind_result($shift_id);
+		$stmt->fetch();
+	$stmt->close();
+	$stmt = $con->prepare($shift_update);
+		$stmt->bind_param('iiissi', $overseer_id, $pioneer_id, $pioneer_b_id, $full, $confirmed, $shift_id);
+		$stmt->execute();
+	$stmt->close();
 	}
-
 if ($status !== 'invalid')
 	{
 ?>
@@ -323,7 +335,7 @@ include('../menu.php');
 <?php
 		}
 ?>  
-  <a class="button" href="../shifts/calendar.php">BACK TO BOOKINGS</a>
+  <a class="button" href="index.php">BACK TO BOOKINGS</a>
 </body>
 <?php
 	}

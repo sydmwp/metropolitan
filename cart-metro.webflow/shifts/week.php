@@ -13,8 +13,10 @@ echo '
 				'.$result.'
 		</div>
 		';
-	$result++; $output_class = "";
-
+	$result++;
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -22,41 +24,57 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -64,41 +82,57 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -106,41 +140,57 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -148,41 +198,57 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -190,41 +256,57 @@ echo '
         <div class="w-form form-wrapper">
 ';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
         </div>
     </div>
@@ -232,41 +314,57 @@ echo '
         <div class="w-form form-wrapper">
 ';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$full_count = 0;
-	$full_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND location_id != '50'");
-	while ($row = mysqli_fetch_array($full_test))
-		{
-		$full = $row[full];
-		if ($full)
-			{
-			++$full_count;
-			}
-		}
-	if ($full_count == $max_shifts)
-		{
-		$output_class = 'shift-full';
-		}
-		else
-		{
-		$output_class = 'shift-available';
-		}
 	if ($month == date('F') AND $result == date('j'))
-		{
-		$output_class.= ' current-date';
-		}
-	if ($result == $date_selected)
-		{
-		$output_class.= ' date-selected';
-		}
+			{
+			$output_class.= ' current-date';
+			}
+		if ($result == $date_selected)
+			{
+			$output_class.= ' date-selected';
+			}
+		else
+			{
+			$full_count = 0;
+			$stmt = $con->prepare($day_check);
+				$stmt->bind_param('s', $date);
+				$stmt->execute();
+				$stmt->bind_result($confirmed, $full);
+				while ($stmt->fetch())
+					{
+					if ($full)
+						{
+						++$full_count;
+						}
+					if (!$confirmed)
+						{
+						$unconfirmed = 'y';
+						}
+					}
+			$stmt->close();
+			if ($full_count == $max_shifts)
+				{
+				$output_class.= ' shift-full';
+				}
+			elseif ($date >= $today AND $unconfirmed)
+				{
+				$output_class.= ' unconfirmed';
+				}
+			else
+				{
+				$output_class.= ' shift-available';
+				}
+			}
 	echo '
-		<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
+		<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 			<input type="hidden" name="select_date" value="'.$date.'">
 			<input type="hidden" name="month" value="'.$month.'">
 			<input class="w-button dates '.$output_class.'" type="submit" value="'.$result.'">
 		</form>
 		';
 	$result++;
-	$output_class = "";
+	$full_count = null;
+	$unconfirmed = null;
+	$output_class = null;
 echo '
 		</div>
 	</div>

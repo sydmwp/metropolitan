@@ -1,27 +1,20 @@
+<?php
+require('../db.php');
+?>
 <!DOCTYPE html>
 <html>
 <head>
 <?php
-require('../db.php');
 $location_id = $_POST['location_id'];
-$location_search = mysqli_query($con,"SELECT * FROM locations WHERE id = '$location_id'");
-while ($row = mysqli_fetch_array($location_search))
-	{
-	$location = strtoupper($row[name]);
-	}
+$stmt = $con->prepare($location_select);
+	$stmt->bind_param('i', $location_id);
+	$stmt->execute();
+	$stmt->bind_result($location);
+	$stmt->fetch();
+$stmt->close();
 $date = $_POST['date'];
 $day = date('d/m/Y',(strtotime($date)));
 $time = $_POST['time'];
-$phone = $_POST['phone'];
-$phone = str_replace('+61', '0', $phone);
-$phone = str_replace(' ', '', $phone);
-$pioneer = mysqli_query($con,"SELECT * FROM pioneers WHERE phone = '$phone'");
-while ($row = mysqli_fetch_array($pioneer))
-	{
-	$volunteer_id = $row[id];
-	$first_name = $row[first_name];
-	$last_name = $row[last_name];
-	}
 echo '
   <title>'.$location.', '.$day.', '.$time.'</title>
   ';
@@ -29,20 +22,21 @@ include('../head.php');
 ?>
 </head>
 <?php
-if ($volunteer_id)
+if ($user)
 {	
 	$double_up = 0;
-	$double_book = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date'");
-	while ($row = mysqli_fetch_array($double_book))
-		{
-		$overseer_check = $row[overseer_id];
-		$pioneer_check = $row[pioneer_id];
-		$pioneer_b_check = $row[pioneer_b_id];
-		if ($overseer_check == $volunteer_id || $pioneer_check == $volunteer_id || $pioneer_b_check == $volunteer_id)
+	$stmt = $con->prepare($shift_date_select);
+		$stmt->bind_param('s', $date);
+		$stmt->execute();
+		$stmt->bind_result($overseer_check, $pioneer_check, $pioneer_b_check);
+		while ($stmt->fetch())
 			{
-			++$double_up;
+			if ($overseer_check == $user || $pioneer_check == $user || $pioneer_b_check == $user)
+				{
+				++$double_up;
+				}
 			}
-		}
+	$stmt->close();
 	if ($double_up == 0)
 		{
 ?>
@@ -83,31 +77,30 @@ if ($location_id == 3)
 	}
 ?>
 <?php
-$shift_existing = mysqli_query($con,"SELECT * FROM shifts WHERE location_id = '$location_id' AND date = '$date' AND time = '$time'");
-while ($row = mysqli_fetch_array($shift_existing))
-	{
-	$overseer_id = $row[overseer_id];
-	$pioneer_id = $row[pioneer_id];
-	$pioneer_b_id = $row[pioneer_b_id];
-	$spaces_filled = 0;
-	}
-if ($overseer_id)
-	{
-	++$spaces_filled;
-	$existing = "y";
-	}
-if ($pioneer_id)
-	{
-	++$spaces_filled;
-	$existing = "y";
-	}
-if ($pioneer_b_id)
-	{
-	++$spaces_filled;
-	$existing = "y";
-	}
-	if ($spaces_filled == 0)
+$spaces_filled = 0;
+$stmt = $con->prepare($shift_record_select);
+	$stmt->bind_param('sis', $date, $location_id, $time);
+	$stmt->execute();
+	$stmt->bind_result($i, $overseer_id, $pioneer_id, $pioneer_b_id);
+	$stmt->fetch();
+	$stmt->close();
+	if ($overseer_id)
 		{
+		++$spaces_filled;
+		$existing = "y";
+		}
+	if ($pioneer_id)
+		{
+		++$spaces_filled;
+		$existing = "y";
+		}
+	if ($pioneer_b_id)
+		{
+		++$spaces_filled;
+		$existing = "y";
+		}
+if ($spaces_filled == 0)
+	{
 ?>
     <div class="confirm-content add-content">
       <div>If you would like to add other pioneers to this shift, please enter their mobile numbers below. <span class="add-mobile-special-text">Only add other pioneers if you have already made an arrangement with them.</span>
@@ -120,7 +113,6 @@ echo '
 		<input type="hidden" name="location_id" value="'.$location_id.'">
 		<input type="hidden" name="date" value="'.$date.'">
 		<input type="hidden" name="time" value="'.$time.'">
-		<input type="hidden" name="volunteer_id" value="'.$volunteer_id.'">
 		';
 ?>
         <input class="w-input add-pioneer square" id="add-pioneer" type="tel" placeholder="Add pioneer mobile number " name="phone_a">
@@ -129,9 +121,9 @@ echo '
       </form>
     </div>
 <?php
-		}
-	elseif ($spaces_filled == 1)
-		{
+	}
+elseif ($spaces_filled == 1)
+	{
 ?>
     <div class="confirm-content add-content">
       <div>If you would like to add another pioneer to this shift, please enter their mobile number below. <span class="add-mobile-special-text">Only add other pioneers if you have already made an arrangement with them.</span>
@@ -144,7 +136,6 @@ echo '
 		<input type="hidden" name="location_id" value="'.$location_id.'">
 		<input type="hidden" name="date" value="'.$date.'">
 		<input type="hidden" name="time" value="'.$time.'">
-		<input type="hidden" name="volunteer_id" value="'.$volunteer_id.'">
 		<input type="hidden" name="existing" value="'.$existing.'">
 		';
 if ($overseer_id)
@@ -171,9 +162,9 @@ if ($pioneer_b_id)
       </form>
     </div>		
 <?php		
-		}
-	else
-		{
+	}
+else
+	{
 ?>
     <div class="w-form form-confirm">
       <form id="email-form" name="email-form" action="confirm_shift.php" method="post">
@@ -182,7 +173,6 @@ echo '
 		<input type="hidden" name="location_id" value="'.$location_id.'">
 		<input type="hidden" name="date" value="'.$date.'">
 		<input type="hidden" name="time" value="'.$time.'">
-		<input type="hidden" name="volunteer_id" value="'.$volunteer_id.'">
 		<input type="hidden" name="existing" value="'.$existing.'">
 		';
 if ($overseer_id)

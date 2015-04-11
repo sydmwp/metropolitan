@@ -51,6 +51,8 @@ h6 {
 }
 p {
   margin-bottom: 5px;
+  font-size: 20px;
+  font-weight: 400;
 }
 .button {
   display: block;
@@ -127,6 +129,10 @@ p {
   border-radius: 24px;
   background-color: #e74c3c;
 }
+.dates.unconfirmed {
+  border-radius: 24px;
+  background-color: #6fad94;
+}
 .form-wrapper {
   position: static;
   width: 100%;
@@ -193,6 +199,16 @@ p {
   border: 0px none transparent;
   background-color: #ff9800;
 }
+.key-current-date.unconfirmed-key {
+  border-style: none;
+  background-color: #6fad94;
+}
+.key-current-date.unconfirmed-green {
+  display: block;
+  padding-top: 10px;
+  border-style: none;
+  background-color: #6fad94;
+}
 .key-text {
   padding-top: 14px;
   padding-left: 0px;
@@ -202,7 +218,7 @@ p {
   display: inline-block;
   padding-top: 12px;
   float: left;
-  color: #bdbdbd;
+  color: white;
   font-size: 22px;
   text-align: left;
 }
@@ -224,7 +240,7 @@ p {
 .key-pull-menu {
   min-width: 400px;
   margin-top: 70px;
-  background-color: #555663;
+  background-color: #c7c7c7;
 }
 .key-pull-menu.my-shifts {
   background-color: #193e94;
@@ -418,10 +434,9 @@ p {
 .home-section {
   display: block;
   width: 100%;
-  height: 33.33%;
-  min-height: 33.33%;
-  padding-top: 0px;
-  padding-bottom: 0px;
+  height: 50%;
+  min-height: 50%;
+  padding-top: 140px;
 }
 .home-section.placements {
   position: static;
@@ -540,7 +555,14 @@ p {
   margin-bottom: 9px;
   margin-left: auto;
   padding-left: 5px;
+  color: #b8b8b8;
   font-size: 26px;
+}
+.text-volunteer.mobile-number {
+  color: #b8b8b8;
+}
+.text-volunteer.current-month {
+  color: #b8b8b8;
 }
 .date-calandur {
   display: block;
@@ -852,17 +874,17 @@ p {
   display: block;
   max-width: 800px;
   min-height: 100px;
-  margin-top: 67px;
+  margin-top: 25px;
   margin-right: auto;
   margin-left: auto;
   background-color: transparent;
   color: white;
-  font-size: 30px;
-  line-height: 38px;
+  font-size: 22px;
+  line-height: 29px;
   text-align: center;
 }
 .sorry-not-found {
-  background-color: #d46155;
+  background-color: #686978;
 }
 .face {
   display: block;
@@ -876,7 +898,7 @@ p {
   text-align: center;
 }
 .confirmed-placements {
-  background-color: #6fad94;
+  background-color: #6d52ac;
 }
 .confirmed-tick {
   display: block;
@@ -892,7 +914,7 @@ p {
 .thankyou {
   display: block;
   max-width: 800px;
-  margin-top: 55px;
+  margin-top: 25px;
   margin-right: auto;
   margin-left: auto;
   color: white;
@@ -909,12 +931,13 @@ p {
   color: white;
   font-size: 35px;
   line-height: 40px;
-  font-weight: 400;
+  font-weight: 300;
   text-align: center;
 }
 .map {
   height: 370px;
   margin-top: 8px;
+  margin-bottom: 8px;
   background-image: url('../images/rovingone.jpg');
   background-position: 50% 50%;
   background-size: cover;
@@ -1025,6 +1048,263 @@ p {
 .select-date {
   color: #8a8a8a;
   font-size: 18px;
+}
+.happy-cart {
+  display: block;
+  width: 50%;
+  height: 50%;
+  max-width: 40%;
+  margin-top: 54px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.confirm-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+.backhome {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  height: 70px;
+  border-top: 1px solid white;
+  font-family:'Fontawesome webfont', sans-serif;
+  color: white;
+  font-size: 25px;
+  text-decoration: none;
+}
+.back-home {
+  display: block;
+  width: 50%;
+  height: 70px;
+  padding-top: 25px;
+  float: left;
+  border-right-style: solid;
+  border-right-width: 1px;
+  font-family:'Fontawesome webfont', sans-serif;
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  text-decoration: none;
+}
+.next {
+  width: 50%;
+  height: 70px;
+  min-width: 0px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  float: right;
+  font-family:'Fontawesome webfont', sans-serif;
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  text-decoration: none;
+}
+.sorry-background {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  min-height: 100%;
+}
+.sad-cart {
+  display: block;
+  width: 50%;
+  height: 50%;
+  max-width: 40%;
+  margin-top: 54px;
+  margin-right: auto;
+  margin-left: auto;
+}
+.add-placements {
+  width: 50%;
+  height: 70px;
+  max-width: 100%;
+  min-width: 0px;
+  padding-top: 25px;
+  padding-bottom: 25px;
+  float: left;
+  border-right-style: solid;
+  border-right-width: 1px;
+  font-family:'Fontawesome webfont', sans-serif;
+  color: white;
+  font-size: 25px;
+  text-align: center;
+  text-decoration: none;
+}
+.faq-div {
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.hero {
+  position: fixed;
+  left: 0px;
+  top: 0px;
+  right: 0px;
+  width: 100%;
+  height: 594px;
+  padding-top: 0px;
+  border-bottom: 1px solid #ccc;
+  background-color: #f7f7f7;
+  background-image: -webkit-linear-gradient(rgba(247, 247, 247, 0.61), rgba(247, 247, 247, 0.61)), url('../images/502015514_univ_lsr_lg.jpg');
+  background-image: linear-gradient(rgba(247, 247, 247, 0.61), rgba(247, 247, 247, 0.61)), url('../images/502015514_univ_lsr_lg.jpg');
+  background-position: 0% 0%, 50% 50%;
+  background-size: auto, cover;
+  background-repeat: repeat, no-repeat;
+  background-attachment: scroll;
+}
+.main-content {
+  position: relative;
+  display: block;
+  max-width: 71%;
+  margin-right: auto;
+  margin-left: auto;
+}
+.bookings-card {
+  display: block;
+  width: 24%;
+  height: 350px;
+  margin-right: 15px;
+  float: left;
+  background-color: #f7f7f7;
+}
+.placements-card {
+  display: block;
+  width: 100%;
+  height: 350px;
+  margin-right: 15px;
+  float: left;
+  background-color: #f7f7f7;
+}
+.my-shifts-card {
+  display: block;
+  width: 24%;
+  height: 350px;
+  margin-right: 14px;
+  float: left;
+  background-color: #f7f7f7;
+}
+.states-card {
+  display: block;
+  width: 24%;
+  height: 350px;
+  margin-right: 15px;
+  float: left;
+  background-color: #f7f7f7;
+}
+.card {
+  width: 100%;
+  height: 450px;
+  margin-bottom: 25px;
+  border-radius: 2px;
+  background-color: #f7f7f7;
+  box-shadow: rgba(0, 0, 0, 0.10) 0px 0px 1px 0px, rgba(120, 120, 120, 0.34) 0px 0px 15px 0px;
+  text-decoration: none;
+}
+.carty {
+  position: relative;
+  top: 64px;
+  display: block;
+  margin-right: auto;
+  margin-left: auto;
+}
+.hero-card {
+  height: 160px;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 2px;
+  background-color: #90a4ae;
+}
+.hero-card.myshifts {
+  background-color: #686978;
+}
+.hero-card.placements {
+  padding: 20px;
+  background-color: #9575cd;
+  color: white;
+  text-decoration: none;
+}
+.hero-card.my-shifts {
+  background-color: #193e94;
+}
+.hero-card.bookings {
+  background-color: #686978;
+}
+.home-body {
+  background-color: white;
+}
+.hero-img {
+  display: block;
+  height: 550px;
+  max-width: 70%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-top: 102px;
+  background-image: -webkit-linear-gradient(225deg, rgba(255, 255, 255, 0.72), transparent), url('../images/502015514_univ_lsr_lg.jpg');
+  background-image: linear-gradient(225deg, rgba(255, 255, 255, 0.72), transparent), url('../images/502015514_univ_lsr_lg.jpg');
+  background-position: 0% 0%, 50% 50%;
+  background-size: auto, cover;
+  background-repeat: repeat, no-repeat;
+  box-shadow: rgba(0, 0, 0, 0.09) 0px 0px 2px 0px, rgba(120, 120, 120, 0.34) 0px 0px 15px 0px;
+  font-weight: 300;
+}
+.hero-text {
+  margin-bottom: 14px;
+  color: #474747;
+  font-size: 50px;
+  line-height: 56px;
+  font-weight: 300;
+}
+.home-header {
+  margin-bottom: 32px;
+  background-color: transparent;
+}
+.home-menu-burger {
+  float: left;
+  color: white;
+  font-size: 30px;
+}
+.menu-container {
+  max-width: 71%;
+}
+.brand-logo {
+  float: left;
+}
+.h1 {
+  font-size: 52px;
+  font-weight: 300;
+  text-align: center;
+  text-decoration: none;
+}
+.section-body {
+  position: relative;
+  left: 0px;
+  top: 611px;
+  width: 100%;
+  padding-top: 125px;
+  padding-bottom: 125px;
+  background-color: white;
+}
+.metro-text {
+  font-style: italic;
+  font-weight: 300;
+}
+.unconfirmed {
+  position: relative;
+  top: 24px;
+  display: block;
+  width: 35px;
+  height: 35px;
+  margin-right: auto;
+  margin-left: auto;
+  padding: 0px;
+  border-radius: 24px;
+  background-color: #6fad94;
+  color: white;
+  font-weight: 500;
 }
 html.w-mod-js *[data-ix="tick"] {
   opacity: 0;
@@ -1139,6 +1419,9 @@ html.w-mod-js *[data-ix="tick"] {
     font-size: 76px;
     text-align: center;
   }
+  .home-section {
+    padding-top: 120px;
+  }
   .home-section.bookings {
     text-decoration: none;
   }
@@ -1252,8 +1535,22 @@ html.w-mod-js *[data-ix="tick"] {
   .comments {
     min-height: 80px;
   }
+  .content-sorry {
+    padding-right: 40px;
+    padding-left: 40px;
+    font-size: 23px;
+    line-height: 32px;
+  }
   .face {
     margin-top: 13%;
+  }
+  .thankyou {
+    font-size: 44px;
+    font-weight: 400;
+  }
+  .placements-entered {
+    font-size: 30px;
+    font-weight: 300;
   }
   .map {
     display: block;
@@ -1290,6 +1587,29 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .section-dates {
     background-color: white;
+  }
+  .happy-cart {
+    width: 65%;
+    height: auto;
+    max-width: 100%;
+  }
+  .sad-cart {
+    width: 65%;
+    height: auto;
+    max-width: 100%;
+  }
+  .main-content {
+    max-width: 95%;
+  }
+  .card {
+    margin-bottom: 25px;
+  }
+  .hero-img {
+    max-width: 95%;
+  }
+  .hero-text {
+    font-size: 43px;
+    line-height: 50px;
   }
 }
 @media (max-width: 767px) {
@@ -1371,7 +1691,7 @@ html.w-mod-js *[data-ix="tick"] {
     max-width: 100%;
     min-width: 100%;
     margin-top: 124px;
-    background-color: #555663;
+    background-color: #c7c7c7;
   }
   .menu-button {
     position: relative;
@@ -1460,6 +1780,9 @@ html.w-mod-js *[data-ix="tick"] {
     padding-top: 6%;
     padding-bottom: 6%;
     font-size: 34px;
+  }
+  .home-section {
+    padding-top: 100px;
   }
   .home-section.my-shifts {
     background-color: #345091;
@@ -1594,11 +1917,11 @@ html.w-mod-js *[data-ix="tick"] {
     margin-left: auto;
   }
   .content-sorry {
-    margin-top: 46px;
+    margin-top: 5px;
     padding-right: 10px;
     padding-left: 10px;
-    font-size: 22px;
-    line-height: 32px;
+    font-size: 14px;
+    line-height: 20px;
   }
   .face {
     margin-top: 43px;
@@ -1608,7 +1931,14 @@ html.w-mod-js *[data-ix="tick"] {
     margin-top: 8%;
   }
   .thankyou {
-    margin-top: 34px;
+    margin-top: 5px;
+    font-size: 28px;
+    line-height: 35px;
+  }
+  .placements-entered {
+    margin-bottom: 6px;
+    font-size: 14px;
+    line-height: 20px;
   }
   .map {
     display: block;
@@ -1645,7 +1975,7 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .delete-shift {
     display: block;
-    margin-top: 16px;
+    margin-top: 17px;
     margin-right: auto;
     margin-left: auto;
     text-align: center;
@@ -1656,6 +1986,53 @@ html.w-mod-js *[data-ix="tick"] {
     float: right;
     font-family:'Fontawesome webfont', sans-serif;
     font-size: 19px;
+  }
+  .happy-cart {
+    width: 30%;
+    height: auto;
+    margin-top: 8px;
+  }
+  .backhome {
+    position: static;
+    margin-top: 18px;
+  }
+  .back-home {
+    font-size: 20px;
+  }
+  .next {
+    font-size: 20px;
+  }
+  .sad-cart {
+    width: 30%;
+    margin-top: 8px;
+  }
+  .add-placements {
+    font-size: 20px;
+  }
+  .hero {
+    height: 407px;
+  }
+  .main-content {
+    max-width: 100%;
+    background-color: transparent;
+  }
+  .carty {
+    top: 15px;
+    height: 300px;
+  }
+  .hero-img {
+    padding-top: 49px;
+    background-position: 0% 0%, 0px 50%;
+  }
+  .home-header {
+    margin-bottom: 5px;
+  }
+  .h1 {
+    font-size: 34px;
+  }
+  .unconfirmed {
+    top: 0px;
+    font-weight: 300;
   }
 }
 @media (max-width: 479px) {
@@ -1708,6 +2085,9 @@ html.w-mod-js *[data-ix="tick"] {
     width: 100%;
     max-width: 100%;
     float: none;
+  }
+  .key-current-date {
+    margin-bottom: 4px;
   }
   .key-text.mobile {
     padding-top: 0px;
@@ -1806,6 +2186,9 @@ html.w-mod-js *[data-ix="tick"] {
     width: 30px;
     height: 30px;
   }
+  .shift-full.my-shift {
+    font-weight: 300;
+  }
   .no-shifts {
     border: 3px solid transparent;
   }
@@ -1814,6 +2197,9 @@ html.w-mod-js *[data-ix="tick"] {
     padding-bottom: 20%;
     font-size: 31px;
     text-align: center;
+  }
+  .home-section {
+    padding-top: 68px;
   }
   .location-text {
     padding-top: 17px;
@@ -1845,7 +2231,7 @@ html.w-mod-js *[data-ix="tick"] {
     margin-bottom: 2px;
     padding-left: 0px;
     font-size: 17px;
-    text-align: center;
+    text-align: left;
   }
   .text-volunteer.mobile-number {
     text-align: center;
@@ -1873,8 +2259,8 @@ html.w-mod-js *[data-ix="tick"] {
   }
   .volunteer-accepted {
     padding-top: 20px;
-    padding-right: 4px;
-    padding-left: 4px;
+    padding-right: 8px;
+    padding-left: 8px;
   }
   .submit-mobile-number {
     height: 60px;
@@ -1979,26 +2365,35 @@ html.w-mod-js *[data-ix="tick"] {
     float: none;
   }
   .content-sorry {
-    margin-top: 43px;
-    font-size: 20px;
-    line-height: 24px;
+    margin-top: 0px;
+    margin-bottom: 9px;
+    font-size: 14px;
+    line-height: 18px;
+    text-align: center;
   }
   .face {
     margin-top: 25%;
+  }
+  .confirmed-placements {
+    height: 100%;
+    background-color: #6d52ac;
   }
   .confirmed-tick {
     margin-top: 25%;
   }
   .thankyou {
+    margin-top: 0px;
     padding-right: 10px;
     padding-left: 10px;
-    font-size: 37px;
-    line-height: 75px;
+    font-size: 27px;
+    line-height: 40px;
+    font-weight: 400;
   }
   .placements-entered {
+    margin-bottom: 0px;
     padding-right: 10px;
     padding-left: 10px;
-    font-size: 25px;
+    font-size: 16px;
     line-height: 25px;
   }
   .map {
@@ -2050,13 +2445,75 @@ html.w-mod-js *[data-ix="tick"] {
     max-width: 100%;
   }
   .delete-shift {
-    margin-top: 11px;
+    margin-top: 0px;
     padding-left: 6px;
     color: dimgray;
     font-size: 18px;
   }
   .form-wrapper-submit {
     margin-bottom: 1px;
+  }
+  .happy-cart {
+    width: 70%;
+    height: auto;
+    margin-top: 25px;
+  }
+  .backhome {
+    position: absolute;
+    margin-top: 0px;
+    padding-top: 0px;
+    color: white;
+    text-decoration: none;
+  }
+  .back-home {
+    display: block;
+    margin-right: auto;
+    margin-left: auto;
+    padding: 25px 12px;
+    font-family:'Fontawesome webfont', sans-serif;
+    color: white;
+    font-size: 14px;
+    text-align: center;
+    text-decoration: none;
+  }
+  .next {
+    font-size: 14px;
+  }
+  .sorry-background {
+    font-size: 13px;
+  }
+  .sad-cart {
+    width: 70%;
+    margin-top: 18px;
+  }
+  .add-placements {
+    font-size: 14px;
+  }
+  .hero {
+    height: 427px;
+  }
+  .card {
+    height: 300px;
+  }
+  .carty {
+    top: 0px;
+    height: 300px;
+  }
+  .hero-img {
+    height: 350px;
+  }
+  .hero-text {
+    color: #333;
+  }
+  .h1 {
+    font-size: 29px;
+    line-height: 36px;
+  }
+  .unconfirmed {
+    top: 11px;
+    width: 30px;
+    height: 30px;
+    font-size: 14px;
   }
 }
 

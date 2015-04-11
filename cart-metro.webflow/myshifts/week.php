@@ -22,22 +22,30 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -46,6 +54,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
@@ -62,22 +71,30 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -86,6 +103,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
@@ -102,22 +120,30 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -126,6 +152,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
@@ -142,22 +169,30 @@ echo '
         <div class="w-form form-wrapper">
 	';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -166,6 +201,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
@@ -182,22 +218,30 @@ echo '
         <div class="w-form form-wrapper">
 ';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -206,6 +250,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
@@ -222,22 +267,30 @@ echo '
         <div class="w-form form-wrapper">
 ';
 	$date = date('Y\-m\-d', (strtotime("$result $month this year")));
-	$shift_test = mysqli_query($con,"SELECT * FROM shifts WHERE date = '$date' AND (overseer_id = '$volunteer_id' OR pioneer_id = '$volunteer_id' OR pioneer_b_id = '$volunteer_id')");
-		while ($row = mysqli_fetch_array($shift_test))
-			{
-			$shift = $row[id];
-			}
+	$stmt = $con->prepare($shift_test);
+		$stmt->bind_param('siii', $date, $user, $user, $user);
+		$stmt->execute();
+		$stmt->bind_result($shift, $confirmed);
+		$stmt->fetch();
+	$stmt->close();
 		if ($month == date('F') AND $result == date('j'))
 			{
 			$output_class = 'w-button current-date';
 			}
 		if ($shift)
 			{
-			$output_class.= ' w-button shift-full my-shift';
+			$output_class.= ' w-button';
+			if ($confirmed == 'y')
+				{
+				$output_class.= ' shift-full my-shift';
+				}
+			else
+				{
+				$output_class.= ' unconfirmed';
+				}
 			echo '
 				<div class="w-form form-wrapper">
-					<form id="email-form" name="shifts_day_view" method="post" action="calendar.php">
-						<input type="hidden" value="'.$volunteer_id.'" name="volunteer_id">
+					<form id="email-form" name="shifts_day_view" method="post" action="index.php">
 						<input type="hidden" name="select_date" value="'.$date.'">
 						<input type="hidden" name="month" value="'.$month.'">
 						<input type="hidden" name="year" value="'.$year.'">
@@ -246,6 +299,7 @@ echo '
 				</div>
 			';
 			$shift = null;
+			$confirmed = null;
 			}
 		else
 			{
